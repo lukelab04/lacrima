@@ -1,0 +1,13 @@
+import test::language_tests
+
+data List
+	| Cell ((), List)
+	| Nil ()
+
+fn sequence(l: List): () =>
+	match l
+		| Nil _ => ()
+		| Cell (_, rest) => sequence rest
+
+export fn main(_: Num): () =>
+	sequence (Nil (language_tests::test_fn_export 10))

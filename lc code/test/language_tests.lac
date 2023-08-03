@@ -1,0 +1,7 @@
+extern print: Num -> ()
+
+export fn test_fn_export(n: Num): () => print n
+
+export fn test_fn_export_multi_arg(n: Num, b: Bool): () =>
+	if b then print n
+	else print (n - 1)

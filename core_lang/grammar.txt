@@ -1,0 +1,63 @@
+Ast :: Expr
+
+Expr :: Application
+     | TypeApplication
+     | TypeAbstraction
+     | Abstraction
+     | Identifier
+     | If
+     | Match
+     | Let
+     | Data
+     | Number 
+     | Bool 
+     | Product
+     | BinOp
+
+Application :: 'Appl' Expr Expr
+
+TypeApplication :: 'TAppl' Expr Type
+
+Abstraction :: 'Abst' Identifier Type Expr
+
+TypeAbstraction :: 'TAbst' Identifier Expr
+
+If :: If Expr Expr Expr
+
+Match :: Match Expr ('Case' Pattern Guard? 'To' Expr)*
+Guard :: Expr
+
+Let :: Let Identifier Type Expr Expr
+
+Data :: 'Data' Identifier @Ident* (Constructor)* Expr
+
+Constructor :: Identifier Type
+
+Product :: 'Prod' (Expr+)
+
+Type :: AtomicType | AdtType | ProdType | FnType | Universal
+
+
+AtomicType :: @ Bool
+           | @ Number
+           | @ TypeVar
+
+FnType :: @Fn Type Type
+
+AdtType :: @Adt (Ident Type*)
+
+ProdType :: @Prod (Type+)
+
+Universal :: @Forall Ident Type
+
+
+BinOp :: (NAdd | NSub | NDiv | NMul | NMod | NEq | NGt | NLt | NGte | NLte | NNeq | BEq | BNEq | BOr | BAnd) Expr Expr
+
+UnOp :: (ProdIdx) Expr
+
+Pattern :: (Any | ADTPattern | BasicLiteral | ProdPattern)
+
+Any :: Ident 
+AdtPattern :: Adt Ident Type* Pattern
+Literal :: Num | Bool 
+ProdPattern :: Prod '(' Pattern+ ')'

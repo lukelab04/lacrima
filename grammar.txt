@@ -1,0 +1,84 @@
+
+Module ::= TopLevelStmt+
+
+TopLvlStmt ::=
+    | 'export' TopLvlStmt
+    | 'import' Namespace
+    | 'extern' Ident TypeHint
+    | Fn
+    | Data
+
+Fn ::= 'fn' Ident '('(Ident TypeHint ,?)+ ')' ':' Type '=>' Expression
+
+Data ::= 'data' Ident Ident* ('|' Ident Type)+
+
+TypeHint ::= ':' Type
+
+Type ::=
+    | AtomicType
+    | AdtType
+    | ProductType
+    | FnType
+    | TypeVar
+    | '(' Type ')'
+
+AtomicType ::= 'Num' | 'Bool' | '()'
+
+AdtType ::= Ident Type*
+
+ProductType ::= '(' (Type ',')* Type ')'
+
+FnType ::= Type => Type
+
+TypeVar ::= Ident
+
+Expression ::=
+    | Let
+    | If
+    | Match
+    | Literal
+    | Ident
+    | Operation
+
+
+Let ::= 'let' Ident TypeHint '=' Expression 'in' Expression
+
+If ::= 'if' Expression 'then' Expression 'else' Expression
+
+Match ::= 'match' Expression ('|' Pattern ('if' Expression?) '=>' Expression)+
+
+Pattern ::=
+    | Ident                                 // Matches any
+    | Ident (Type*) Pattern                 // Matches Adt
+    | Num
+    | Bool
+    | Unit
+    | '(' (Pattern ',')* Pattern ')'        // Match Tuple
+
+Literal ::=
+    | Number
+    | Bool
+    | Tuple
+    | Lambda
+    | '()'
+
+
+Number ::= (0-9+)(0-9|'_')*
+Bool ::= 'true' | 'false'
+String ::= " _* "
+Tuple ::= '(' (Expression ',')* Expression ')'
+Lambda ::= '(' (Ident TypeHint ,?)+ ')' ':' Type => Expression
+
+// This is where the left recursion comes in. Pratt parsing to the rescue!
+// But the BNF notation breaks down a little.
+
+Operation ::=
+    | PrefixExpr
+    | NonPrefixExpr
+
+PrefixExpr ::= '-' Expression
+
+NonPrefixExpr ::= Expression BinOp Expression | Expression Expression
+
+BinOp ::= + | - | / | * | % | == | != | && | ||
+
