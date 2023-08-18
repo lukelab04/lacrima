@@ -52,7 +52,7 @@ then if False
 else...
 ```
 Long chains of `if-else` can be a little difficult to read, though. Luckily, Lacrima features
-`match` statements to make this a better.
+`match` statements to make this better.
 
 #### Match Statement 
 
