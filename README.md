@@ -51,7 +51,7 @@ then if False
      else ...
 else...
 ```
-Long chains of `if-else` can be a little difficult to read, though. Luckily, Lacrima
+Long chains of `if-else` can be a little difficult to read, though. Luckily, Lacrima features
 `match` statements to make this a better.
 
 #### Match Statement 
